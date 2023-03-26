@@ -1,83 +1,136 @@
--- n, v, i, t = mode names
 
 vim.g.mapleader = " "
 
+function toggleNumber()
+  vim.opt.number = not vim.opt.number:get()
+  -- vim.fn["which_key#register"]("<leader>cg", { ":<C-U>lua toggleNumber()<CR>", "Toggle number visibility" })
+end
 
--- vim.keymap.set("n", "<leader>b", ":colorscheme blue<CR>")
--- vim.keymap.set("n", "<leader>f", ":colorscheme nightfox<CR>")
+local function kmap(mode, lhs, rhs, description, attr)
+  attr = attr or {noremap = true, silent = true}
+  vim.keymap.set(mode, lhs, rhs, attr)
+end
 
-vim.keymap.set("n", "<leader>cg", ":colorscheme gruvbox<CR>")
+local Terminal  = require('toggleterm.terminal').Terminal
+local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+local bpython = Terminal:new({ cmd = "bpython", hidden = true, direction = "float", })
+function _lazygit_toggle() lazygit:toggle() end
+function _bpython_toggle() bpython:toggle() end
+
+local function kmapp(mode, lhs, rhs, description)
+  vim.keymap.set(mode, lhs, rhs, {noremap = true, silent = true})
+  if description then
+    vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, {noremap = true, silent = true, expr = false, nowait = false})
+    vim.api.nvim_buf_set_var(0, 'which_key_map', {lhs, description})
+  end
+end
+
+-- Define kmap function with description
+local function kmappp(mode, lhs, rhs, desc)
+    local opts = {noremap = true, silent = true}
+    if desc then
+        opts = vim.tbl_extend('force', opts, {expr = false, nowait = true})
+        local key = table.concat(vim.fn.split(lhs, '\\'), '')
+        local buf = 0
+        vim.api.nvim_buf_set_keymap(buf, mode, lhs, rhs, opts)
+        vim.api.nvim_buf_set_var(buf, 'which_key_map', {[key] = desc})
+    else
+        vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+    end
+end
+
+-- Theme
+kmapp('n', '<leader>cb', ':colorscheme darkblue<CR>', 'Theme darkblue')
+kmap('n', '<leader>cg', ':colorscheme gruvbox<CR>', 'Theme gruvbox')
+kmap('n', '<leader>ce', ':colorscheme everforest<CR>', 'Theme everforest')
+kmap('n', '<leader>cn', ':colorscheme nightfox<CR>', 'Theme nightfox')
+kmap('n', '<leader>cs', ':colorscheme sonokai<CR>', 'Theme somokai')
+
+
+
+
+-- vim.api.nvim_set_keymap("n", "<leader>cn", ":lua toggleNumber()<CR>", {noremap = true, silent = true})
+-- vim.api.nvim_set_keymap("n", "<leader>cg", ":lua toggleNumber()<CR>", {noremap = true, silent = true, nowait = true}, {description = "Toggle line numbers"})
+-- vim.keymap.nnoremap { "<leader>cn", function() toggleNumber() end, silent = true, nowait = true, description = "Toggle line numbers" }
+
+-- Define a key mapping to toggle the file explorer
+-- vim.api.nvim_set_keymap
+kmap('n', '<leader>e', ':NERDTreeToggle<CR>', 'Tree', { noremap = true, silent = false })
+
+
 
 -- Reload current file
-vim.keymap.set("n", "<leader>r", ":w | so %<CR>")
+kmap("n", "<leader>r", ":w | so %<CR>")
 
 
 -- Window navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h")
-vim.keymap.set("n", "<C-j>", "<C-w>j")
-vim.keymap.set("n", "<C-k>", "<C-w>k")
-vim.keymap.set("n", "<C-l>", "<C-w>l")
+kmap("n", "<C-h>", "<C-w>h")
+kmap("n", "<C-j>", "<C-w>j")
+kmap("n", "<C-k>", "<C-w>k")
+kmap("n", "<C-l>", "<C-w>l")
 
 
 -- Save and Quit
-vim.keymap.set("n", "<leader>w", ":w<CR>")
-vim.keymap.set("n", "<leader>q", ":q<CR>")
-vim.keymap.set("n", "<leader>qq", ":qall<CR>")
+kmap("n", "<leader>w", ":w<CR>")
+kmap("n", "<leader>q", ":q<CR>")
+kmap("n", "<leader>qq", ":qall<CR>")
 
 
 -- Commenting
-vim.keymap.set("n", "<leader>ct", ":Commentary<CR>")
-vim.keymap.set("v", "<leader>ct", ":Commenttary<CR>")
+kmap("n", "<leader>cc", ":Commentary<CR>")
+kmap("v", "<leader>cc", ":Commenttary<CR>")
 
 -- Insert mode mappings
 -- Exit insert mode and move to beginning of line
-vim.keymap.set("i", "<C-b>", "<Esc>^i")
+kmap("i", "<C-b>", "<Esc>^i")
 -- Move to end of line
-vim.keymap.set("i", "<C-e>", "<End>")
+kmap("i", "<C-e>", "<End>")
 
 -- Create new vertical split
-vim.keymap.set("n", "<leader>v", ":vsplit<CR>")
+kmap("n", "<leader>v", ":vsplit<CR>")
 -- Create new horizontal split
-vim.keymap.set("n", "<leader>s", ":split<CR>")
+kmap("n", "<leader>s", ":split<CR>")
 -- Toggle terminal window
-vim.keymap.set("n", "<leader>t", ":ToggleTerm<CR>")
-
+kmap("n", "<leader>tf", ":ToggleTerm size=20 dir=. direction=float<CR>")
+kmap("n", "<leader>tp", ":ToggleTerm size=20 dir=. direction=float<CR>")
+kmap("n", "<leader>tt", ":ToggleTerm size=20 dir=. direction=horizontal<CR>")
+kmap('t', '<esc>', '<C-\\><C-n>', {noremap = true})
+kmap("n", "<leader>tg", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
+kmap("n", "<leader>tb", "<cmd>lua _bpython_toggle()<CR>", {noremap = true, silent = true})
 
 -- Save file
-vim.keymap.set("n", "<leader>w", ":write<CR>")
+kmap("n", "<leader>w", ":write<CR>")
 -- Quit file
-vim.keymap.set("n", "<leader>q", ":quit<CR>")
+kmap("n", "<leader>q", ":quit<CR>")
 -- Quit all files
-vim.keymap.set("n", "<leader>qq", ":qall<CR>")
+kmap("n", "<leader>qq", ":qall<CR>")
 
--- Open file explorer
-vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")
 
 -- Enter command mode
-vim.keymap.set("n", "<leader>;", ":")
+kmap("n", "<leader>;", ":")
 -- Select all
-vim.keymap.set("n", "<leader>a", "ggVG")
+kmap("n", "<leader>a", "ggVG")
 
 -- Copy to system clipboard
-vim.keymap.set("n", "<leader>y", '"+y')
+kmap("n", "<leader>y", '"+y')
 -- Paste from system clipboard
-vim.keymap.set("n", "<leader>p", '"+p')
+kmap("n", "<leader>p", '"+p')
 -- Cut to system clipboard
-vim.keymap.set("n", "<leader>d", '"+d')
+kmap("n", "<leader>d", '"+d')
 -- Delete to system clipboard
-vim.keymap.set("n", "<leader>x", '"+x')
+kmap("n", "<leader>x", '"+x')
 
 -- Open new tab
-vim.keymap.set("n", "<leader>z", ":tabnew<CR>")
+kmap("n", "<leader>tn", ":tabnew<CR>")
 
 -- Switch to tab 1-9
-vim.keymap.set("n", "<leader>1", "1gt")
-vim.keymap.set("n", "<leader>2", "2gt")
-vim.keymap.set("n", "<leader>3", "3gt")
-vim.keymap.set("n", "<leader>4", "4gt")
-vim.keymap.set("n", "<leader>5", "5gt")
+kmap("n", "<leader>1", "1gt")
+kmap("n", "<leader>2", "2gt")
+kmap("n", "<leader>3", "3gt")
+kmap("n", "<leader>4", "4gt")
+kmap("n", "<leader>5", "5gt")
 
-vim.keymap.set("n", "<leader>ps", ":PackerSync<CR>")
+kmap("n", "<leader>ps", ":PackerSync<CR>")
 
 
 
@@ -95,22 +148,5 @@ vim.api.nvim_set_keymap('n', '<leader>fb', ":lua require('telescope.builtin').bu
 -- List commands using Telescope
 vim.api.nvim_set_keymap('n', '<leader>fc', ":lua require('telescope.builtin').commands()<CR>", {noremap = true, silent = true})
 
-
-
--- Configure vim-slime
-vim.g.slime_target = 'tmux'
-vim.g.slime_python_ipython = 1
-vim.g.slime_dont_ask_default = 1
-vim.g.slime_default_config = {
-  socket_name = 'default',
-  target_pane = '{top-right}',
-  target_session = '',
-  comment_string = '// ',
-  cmd = {'tmux', 'send-keys', '-t', '{top-right}', '%s', 'Enter'},
-}
-
--- Define keybindings for vim-slime
-vim.api.nvim_set_keymap('n', '<Leader>s', ':SlimeSend<CR>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<Leader>S', ':SlimeSend1<CR>', {noremap = true})
 
 

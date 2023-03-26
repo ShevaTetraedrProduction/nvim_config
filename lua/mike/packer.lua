@@ -12,35 +12,53 @@ packer.startup(function()
   -- Packer itself
   use 'wbthomason/packer.nvim'
 
-  -- Theme
-  use 'gruvbox-community/gruvbox'
-
-
   -- Fuzzy Finder
   use {
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
   }
+
+  -- Theme
+  -- use 'folke/tokyonight.nvim'
+  use {'sainnhe/everforest'}
+  use {'EdenEast/nightfox.nvim'}
+  use {'sainnhe/sonokai'}
+  use {'gruvbox-community/gruvbox'}
   
     -- Misc
   use 'tpope/vim-commentary'
   use 'tpope/vim-surround'
   use 'tpope/vim-repeat'
 
-  
-  use {
-    'goolord/alpha-nvim',
-    config = function ()
-      require'alpha'.setup(require'alpha.themes.dashboard'.config)
-    end
-  }
+  -- DASHBOARD  
+  -- use {
+    -- 'goolord/alpha-nvim',
+    -- config = function ()
+      -- require('plugins/dashboard')
+      -- require'alpha'.setup(require'alpha.themes.dashboard'.config)
+    -- end
+  -- }
 
 
   -- Whichkey
-  use 'folke/which-key.nvim'
+  use {
+    'folke/which-key.nvim',
+    config = function()
+      require('which-key').setup()
+    end
+  }
 
   -- Tagbar
   use 'preservim/tagbar'
+
+  -- Toggle term
+  use {
+    'akinsho/nvim-toggleterm.lua',
+    tag = "*",
+    config = function()
+      require('toggleterm').setup{}
+    end
+  }
 
   -- Python Development
   use 'python-mode/python-mode'
@@ -54,7 +72,42 @@ packer.startup(function()
   
   -- Syntax highlighting
   use 'sheerun/vim-polyglot'
+  
+  -- Tree File Explorer
+  use {
+  'preservim/nerdtree',
+  requires = { 'ryanoasis/vim-devicons' },
+  config = function()
+    -- Load NERDTree configuration
+    require('plugins.nerdtree')
+  end
+  }
 
+  -- DASHBOARD
+  use {
+    'glepnir/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        -- config
+        config = {
+          center = {
+            {
+              icon = '',
+              icon_hl = 'group',
+              desc = 'description',
+              desc_hl = 'group',
+              key = 'shortcut key in dashboard buffer not keymap !!',
+              key_hl = 'group',
+              action = '',
+            },
+          },
+          footer = {},
+        }
+      }
+    end,
+    requires = {'nvim-tree/nvim-web-devicons'}
+  }
 
   use 'Shougo/deoplete.nvim'
 
@@ -73,10 +126,6 @@ packer.startup(function()
   -- Documentation lookup
   use 'kkoomen/vim-doge'
   
-  -- snippet
-  -- use "rafamadriz/friendly-snippets"
-
-
   -- Install and load nvim-lspconfig
   use {
     'neovim/nvim-lspconfig',
