@@ -11,6 +11,9 @@ vim.cmd [[autocmd BufWritePost plugins.lua PackerClean]]
 packer.startup(function()
   -- Packer itself
   use 'wbthomason/packer.nvim'
+ 
+
+  -- use 'nvim-tree/nvim-web-devicons'
 
   -- Fuzzy Finder
   use {
@@ -24,20 +27,48 @@ packer.startup(function()
   use {'EdenEast/nightfox.nvim'}
   use {'sainnhe/sonokai'}
   use {'gruvbox-community/gruvbox'}
+
+
+  -- Install the Galaxyline plugin
+  -- use {
+    -- 'glepnir/galaxyline.nvim', branch = 'main',
+    -- config = function() require('galaxyline') end
+  -- }
   
+  -- use {
+    -- 'hoob3rt/lualine',
+    -- config = function()
+      -- require('lualine').setup{}
+    -- end
+  -- }
+
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    config = function() require('plugins.lualine').setup{} end
+  }
+
     -- Misc
   use 'tpope/vim-commentary'
   use 'tpope/vim-surround'
   use 'tpope/vim-repeat'
 
-  -- DASHBOARD  
+  -- DASHBOARD 
+  -- use 'glepnir/dashboard-nvim'
   -- use {
-    -- 'goolord/alpha-nvim',
+    -- 'glepnir/dashboard-nvim',
     -- config = function ()
-      -- require('plugins/dashboard')
+      -- require('plugins/dashboard').setup()
       -- require'alpha'.setup(require'alpha.themes.dashboard'.config)
     -- end
-  -- }
+   -- }
+
+-- use {
+  -- 'glepnir/dashboard-nvim',
+  -- event = 'VimEnter',
+  -- requires = {'nvim-tree/nvim-web-devicons'}
+-- }
+
 
 
   -- Whichkey
@@ -69,7 +100,36 @@ packer.startup(function()
     'kyazdani42/nvim-tree.lua',
     requires = 'kyazdani42/nvim-web-devicons'
   } 
-  
+ 
+  -- Hardline
+  -- use {'ojroques/nvim-hardline'}
+  -- use {'tami5/nvim-hardware-status'}
+
+
+  use {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
+  }
+
+
+  use 'sindrets/diffview.nvim'
+
+
+  -- Trouble Lua
+  use {
+    "folke/trouble.nvim",
+    requires = "nvim-tree/nvim-web-devicons",
+    config = function()
+      require("plugins.trouble").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
+
   -- Syntax highlighting
   use 'sheerun/vim-polyglot'
   
@@ -83,32 +143,7 @@ packer.startup(function()
   end
   }
 
-  -- DASHBOARD
-  use {
-    'glepnir/dashboard-nvim',
-    event = 'VimEnter',
-    config = function()
-      require('dashboard').setup {
-        -- config
-        config = {
-          center = {
-            {
-              icon = '',
-              icon_hl = 'group',
-              desc = 'description',
-              desc_hl = 'group',
-              key = 'shortcut key in dashboard buffer not keymap !!',
-              key_hl = 'group',
-              action = '',
-            },
-          },
-          footer = {},
-        }
-      }
-    end,
-    requires = {'nvim-tree/nvim-web-devicons'}
-  }
-
+ 
   use 'Shougo/deoplete.nvim'
 
   -- Code formatting
@@ -121,6 +156,22 @@ packer.startup(function()
       'rcarriga/nvim-dap-ui',
       'mfussenegger/nvim-dap-python'
     }
+  }
+
+
+   -- LSP signature plugin
+  use {
+    'ray-x/lsp_signature.nvim',
+    config = function()
+      require('lsp_signature').setup{
+        bind = true,
+        handler_opts = {
+          border = "single"
+        },
+        hint_enable = false,
+        doc_lines = 0,
+      }
+    end
   }
 
   -- Documentation lookup

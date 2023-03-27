@@ -3,7 +3,7 @@ opt = vim.opt
 opt.nu = true
 
 -- Templory
-vim.cmd('colorscheme gruvbox')
+vim.cmd('colorscheme everforest')
 
 opt.tabstop = 2
 opt.softtabstop = 2

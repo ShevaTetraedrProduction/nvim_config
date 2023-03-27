@@ -6,6 +6,26 @@ function toggleNumber()
   -- vim.fn["which_key#register"]("<leader>cg", { ":<C-U>lua toggleNumber()<CR>", "Toggle number visibility" })
 end
 
+
+-- Function to maximize or restore panel
+local is_maximized = false
+
+function ToggleMaximize()
+  if not is_maximized then
+    vim.cmd('wincmd _')
+    vim.cmd('wincmd |')
+    vim.cmd('wincmd +')
+    vim.cmd('wincmd +')
+    is_maximized = true
+  else
+    vim.cmd('wincmd =')
+    is_maximized = false
+  end
+end
+
+
+
+
 local function kmap(mode, lhs, rhs, description, attr)
   attr = attr or {noremap = true, silent = true}
   vim.keymap.set(mode, lhs, rhs, attr)
@@ -58,6 +78,7 @@ kmap('n', '<leader>cs', ':colorscheme sonokai<CR>', 'Theme somokai')
 kmap('n', '<leader>e', ':NERDTreeToggle<CR>', 'Tree', { noremap = true, silent = false })
 
 
+kmap('n', '<leader>mm', ':lua ToggleMaximize()<CR>', { noremap = true, silent = true })
 
 -- Reload current file
 kmap("n", "<leader>r", ":w | so %<CR>")
@@ -92,7 +113,6 @@ kmap("n", "<leader>v", ":vsplit<CR>")
 kmap("n", "<leader>s", ":split<CR>")
 -- Toggle terminal window
 kmap("n", "<leader>tf", ":ToggleTerm size=20 dir=. direction=float<CR>")
-kmap("n", "<leader>tp", ":ToggleTerm size=20 dir=. direction=float<CR>")
 kmap("n", "<leader>tt", ":ToggleTerm size=20 dir=. direction=horizontal<CR>")
 kmap('t', '<esc>', '<C-\\><C-n>', {noremap = true})
 kmap("n", "<leader>tg", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
@@ -147,6 +167,27 @@ vim.api.nvim_set_keymap('n', '<leader>fb', ":lua require('telescope.builtin').bu
 
 -- List commands using Telescope
 vim.api.nvim_set_keymap('n', '<leader>fc', ":lua require('telescope.builtin').commands()<CR>", {noremap = true, silent = true})
+
+
+-- Go to definition
+kmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+-- Go to type definition
+kmap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+-- Find references
+kmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+-- Rename symbol
+kmap('n', 'gR', '<cmd>lua vim.lsp.buf.rename()<CR>')
+-- Show documentation
+kmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
+kmap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+-- Code actions
+kmap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+-- Formatting
+kmap('n', '<leader>cf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+
+-- Define a custom key map to trigger signature help
+vim.api.nvim_set_keymap('n', '<Leader>k', '<cmd>lua require("lsp_signature").signature_help()<CR>', { noremap = true, silent = true })
+
 
 
 

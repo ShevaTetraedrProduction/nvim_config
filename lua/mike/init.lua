@@ -7,6 +7,7 @@ require('mike.packer')
 require('mike.set')
 require('mike.remap')
 
+require('plugins.lsp')
 
 -- require('plugins.nvim_tree')
 -- Configure plugins
