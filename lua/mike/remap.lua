@@ -154,6 +154,24 @@ kmap("n", "<leader>ps", ":PackerSync<CR>")
 
 
 
+
+-- Resize the current window horizontally
+kmap('n', '<C-w>l', ':vertical resize +5<CR>', { noremap = true, silent = true })
+kmap('n', '<C-w>h', ':vertical resize -5<CR>', { noremap = true, silent = true })
+
+-- Resize the current window vertically
+kmap('n', '<C-w>j', ':resize +5<CR>', { noremap = true, silent = true })
+kmap('n', '<C-w>k', ':resize -5<CR>', { noremap = true, silent = true })
+
+-- Resize the current window to a specific height/width
+kmap('n', '<S-Right>', ':vertical resize -10<CR>', { noremap = true, silent = true })
+kmap('n', '<S-Left>', ':vertical resize +10<CR>', { noremap = true, silent = true })
+kmap('n', '<S-Up>', ':resize -10<CR>', { noremap = true, silent = true })
+kmap('n', '<S-Down>', ':resize +10<CR>', { noremap = true, silent = true })
+
+
+
+
 vim.api.nvim_set_keymap('n', '<leader>ss', ':Dashboard<CR>', {noremap = true, silent = true})
 
 -- Find files using Telescope

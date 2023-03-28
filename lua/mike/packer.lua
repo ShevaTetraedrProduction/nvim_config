@@ -21,6 +21,17 @@ packer.startup(function()
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
   }
 
+
+  -- Git
+  use {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup()
+    end
+  }
+  use 'nvim-treesitter/nvim-treesitter' -- A syntax tree sitter
+  use 'neovim/nvim-lspconfig' -- LSP configuration
+
   -- Theme
   -- use 'folke/tokyonight.nvim'
   use {'sainnhe/everforest'}
