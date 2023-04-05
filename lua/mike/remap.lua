@@ -5,6 +5,19 @@ function toggleNumber()
   vim.opt.number = not vim.opt.number:get()
   -- vim.fn["which_key#register"]("<leader>cg", { ":<C-U>lua toggleNumber()<CR>", "Toggle number visibility" })
 end
+-- Toggle line numbers and IndentBlankline plugin on and off
+function toggle_display()
+  vim.wo.number = not vim.wo.number -- toggle line numbers
+  -- vim.wo.number = false
+  -- if vim.wo.number == true then
+    -- vim.wo.number = false
+  -- else
+    -- vim.wo.number = true
+  -- end
+  -- vim.wo.relativenumber = not vim.wo.relativenumber -- toggle relative line numbers
+  vim.cmd('IndentBlanklineToggle') -- toggle IndentBlankline plugin
+end
+
 
 
 -- Function to maximize or restore panel
@@ -153,8 +166,6 @@ kmap("n", "<leader>5", "5gt")
 kmap("n", "<leader>ps", ":PackerSync<CR>")
 
 
-
-
 -- Resize the current window horizontally
 kmap('n', '<C-w>l', ':vertical resize +5<CR>', { noremap = true, silent = true })
 kmap('n', '<C-w>h', ':vertical resize -5<CR>', { noremap = true, silent = true })
@@ -169,6 +180,7 @@ kmap('n', '<S-Left>', ':vertical resize +10<CR>', { noremap = true, silent = tru
 kmap('n', '<S-Up>', ':resize -10<CR>', { noremap = true, silent = true })
 kmap('n', '<S-Down>', ':resize +10<CR>', { noremap = true, silent = true })
 
+kmap('n', '<Leader>td', ':lua toggle_display()<CR>', { noremap = true, silent = true })
 
 
 

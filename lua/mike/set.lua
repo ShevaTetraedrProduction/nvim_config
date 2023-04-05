@@ -25,8 +25,6 @@ opt.smartcase = true
 opt.mouse = 'a'
 
 
-
-
 opt.cursorline = true
 
 

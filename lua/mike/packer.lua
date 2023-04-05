@@ -9,6 +9,8 @@ vim.cmd [[autocmd BufWritePost plugins.lua PackerClean]]
 
 -- Define plugins
 packer.startup(function()
+
+
   -- Packer itself
   use 'wbthomason/packer.nvim'
  
@@ -58,6 +60,18 @@ packer.startup(function()
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
     config = function() require('plugins.lualine').setup{} end
   }
+
+  -- ChatGPT
+  -- https://github.com/jackMort/ChatGPT.nvim
+  use({
+      "jackMort/ChatGPT.nvim",
+      config = function() require("chatgpt").setup({}) end,
+      requires = {
+        "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope.nvim"
+      }
+    })
+
 
     -- Misc
   use 'tpope/vim-commentary'
@@ -152,6 +166,28 @@ packer.startup(function()
     -- Load NERDTree configuration
     require('plugins.nerdtree')
   end
+  }
+
+
+  -- Install and configure nvim-bufferline.lua
+  use {
+    'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons',
+    config = function()
+      require('plugins.bufferline')
+    end
+  }
+
+  -- Install and configure nvim-compe
+  use {'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip'}
+
+
+  -- Indent
+  use {
+    'lukas-reineke/indent-blankline.nvim',
+    config = function()
+      -- Indent_blankline
+      require('plugins.indent_blankline')
+    end
   }
 
  
