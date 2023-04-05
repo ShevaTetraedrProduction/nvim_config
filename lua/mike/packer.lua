@@ -6,243 +6,242 @@ local packer = require('packer')
 vim.cmd [[autocmd BufWritePost plugins.lua PackerCompile]]
 vim.cmd [[autocmd BufWritePost plugins.lua PackerClean]]
 
+-- Function to install and configure a package
+local function ins(repo, name, requires)
+	if name == nil then
+		-- If the name parameter is not provided, use the last part of the repo as the name
+		name = string.match(repo, '[^/]+$')
+	end
+
+	local use_opts = {}
+
+	if requires ~= nil then
+		use_opts = requirements
+		-- Loop through the optional requirements and add them to the `use_opts` table
+		-- for _, req in ipairs(requires) do
+			-- table.insert(use_opts, { req, opt = true })
+		-- end
+	end
+
+
+	packer.use {
+		repo,            -- Repository name (e.g. 'lewis6991/gitsigns.nvim')
+		as = name,       -- Package name (e.g. 'gitsigns')
+		requires = use_opts,  -- Optional requirements
+		config = function()
+			-- Attempt to load the package
+			local ok, plugin = pcall(require, name)
+
+			-- If the package was loaded successfully and has a `setup()` function, call it
+			if ok and type(plugin.setup) == 'function' then
+				plugin.setup()
+			end
+		end
+	}
+end
+
 
 -- Define plugins
 packer.startup(function()
 
+	-- Packer itself
+	use 'wbthomason/packer.nvim'
 
-  -- Packer itself
-  use 'wbthomason/packer.nvim'
- 
+	-- use 'nvim-tree/nvim-web-devicons'
+	ins('lukas-reineke/indent-blankline.nvim', 'plugins.indent_blankline')
 
-  -- use 'nvim-tree/nvim-web-devicons'
+	use('glepnir/dashboard-nvim')
 
-  -- Fuzzy Finder
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
-  }
-
-
-  -- Git
-  use {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup()
-    end
-  }
-  use 'nvim-treesitter/nvim-treesitter' -- A syntax tree sitter
-  use 'neovim/nvim-lspconfig' -- LSP configuration
-
-  -- Theme
-  -- use 'folke/tokyonight.nvim'
-  use {'sainnhe/everforest'}
-  use {'EdenEast/nightfox.nvim'}
-  use {'sainnhe/sonokai'}
-  use {'gruvbox-community/gruvbox'}
+	-- Fuzzy Finder
+	-- ins('nvim-telescope/telescope.nvim', nil, {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}})
+	use {
+		'nvim-telescope/telescope.nvim',
+		requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+	}
 
 
-  -- Install the Galaxyline plugin
-  -- use {
-    -- 'glepnir/galaxyline.nvim', branch = 'main',
-    -- config = function() require('galaxyline') end
-  -- }
-  
-  -- use {
-    -- 'hoob3rt/lualine',
-    -- config = function()
-      -- require('lualine').setup{}
-    -- end
-  -- }
+	-- Git
+	-- ins('lewis6991/gitsigns.nvim','gitsigns', nil)
+	use {
+		'lewis6991/gitsigns.nvim',
+		config = function() require('gitsigns').setup{} end
+	}
 
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
-    config = function() require('plugins.lualine').setup{} end
-  }
+	use 'nvim-treesitter/nvim-treesitter' -- A syntax tree sitter
+	use 'neovim/nvim-lspconfig' -- LSP configuration
 
-  -- ChatGPT
-  -- https://github.com/jackMort/ChatGPT.nvim
-  use({
-      "jackMort/ChatGPT.nvim",
-      config = function() require("chatgpt").setup({}) end,
-      requires = {
-        "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope.nvim"
-      }
-    })
+	-- Theme
+	-- use 'folke/tokyonight.nvim'
+	use {'sainnhe/everforest'}
+	use {'EdenEast/nightfox.nvim'}
+	use {'sainnhe/sonokai'}
+	use {'gruvbox-community/gruvbox'}
 
 
-    -- Misc
-  use 'tpope/vim-commentary'
-  use 'tpope/vim-surround'
-  use 'tpope/vim-repeat'
+	use {
+		'nvim-lualine/lualine.nvim',
+		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+		config = function() require('plugins.lualine').setup{} end
+	}
 
-  -- DASHBOARD 
-  -- use 'glepnir/dashboard-nvim'
-  -- use {
-    -- 'glepnir/dashboard-nvim',
-    -- config = function ()
-      -- require('plugins/dashboard').setup()
-      -- require'alpha'.setup(require'alpha.themes.dashboard'.config)
-    -- end
-   -- }
-
--- use {
-  -- 'glepnir/dashboard-nvim',
-  -- event = 'VimEnter',
-  -- requires = {'nvim-tree/nvim-web-devicons'}
--- }
+	-- ChatGPT
+	-- https://github.com/jackMort/ChatGPT.nvim
+	-- use({
+	-- "jackMort/ChatGPT.nvim",
+	-- config = function() require("chatgpt").setup({}) end,
+	-- requires = {
+	-- "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim",
+	-- "nvim-telescope/telescope.nvim"
+	-- }
+	-- })
 
 
+	-- Misc
+	use 'tpope/vim-commentary'
+	use 'tpope/vim-surround'
+	use 'tpope/vim-repeat'
 
-  -- Whichkey
-  use {
-    'folke/which-key.nvim',
-    config = function()
-      require('which-key').setup()
-    end
-  }
+	-- DASHBOARD 
+	-- use 'glepnir/dashboard-nvim'
+	-- use {
+	-- 'glepnir/dashboard-nvim',
+	-- config = function ()
+	-- require('plugins/dashboard').setup()
+	-- require'alpha'.setup(require'alpha.themes.dashboard'.config)
+	-- end
+	-- }
 
-  -- Tagbar
-  use 'preservim/tagbar'
-
-  -- Toggle term
-  use {
-    'akinsho/nvim-toggleterm.lua',
-    tag = "*",
-    config = function()
-      require('toggleterm').setup{}
-    end
-  }
-
-  -- Python Development
-  use 'python-mode/python-mode'
-
-  use { 'RishabhRD/nvim-lsputils', requires = {'neovim/nvim-lspconfig'} }
-  
-  use {
-    'kyazdani42/nvim-tree.lua',
-    requires = 'kyazdani42/nvim-web-devicons'
-  } 
- 
-  -- Hardline
-  -- use {'ojroques/nvim-hardline'}
-  -- use {'tami5/nvim-hardware-status'}
+	-- use {
+	-- 'glepnir/dashboard-nvim',
+	-- event = 'VimEnter',
+	-- requires = {'nvim-tree/nvim-web-devicons'}
+	-- }
 
 
-  use {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
-  }
+	-- ins('folke/which-key.nvim', 'which-key')
+	use {
+		'folke/which-key.nvim',
+		config = function() require('which-key').setup{} end
+	}
+
+	-- Tagbar
+	use 'preservim/tagbar'
+
+	-- Toggle term
+	use {
+		'akinsho/nvim-toggleterm.lua',
+		tag = "*",
+		config = function()
+			require('toggleterm').setup{}
+		end
+	}
+
+	-- Python Development
+	use 'python-mode/python-mode'
+
+	use { 'RishabhRD/nvim-lsputils', requires = {'neovim/nvim-lspconfig'} }
+
+	use { 'kyazdani42/nvim-tree.lua',requires = 'kyazdani42/nvim-web-devicons'} 
+
+	-- Hardline
+	-- use {'ojroques/nvim-hardline'}
+	-- use {'tami5/nvim-hardware-status'}
 
 
-  use 'sindrets/diffview.nvim'
+	use {
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
+		"neovim/nvim-lspconfig",
+	}
 
 
-  -- Trouble Lua
-  use {
-    "folke/trouble.nvim",
-    requires = "nvim-tree/nvim-web-devicons",
-    config = function()
-      require("plugins.trouble").setup {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      }
-    end
-  }
+	use 'sindrets/diffview.nvim'
 
 
-  -- Syntax highlighting
-  use 'sheerun/vim-polyglot'
-  
-  -- Tree File Explorer
-  use {
-  'preservim/nerdtree',
-  requires = { 'ryanoasis/vim-devicons' },
-  config = function()
-    -- Load NERDTree configuration
-    require('plugins.nerdtree')
-  end
-  }
+	-- Trouble Lua
+	-- use {
+	-- "folke/trouble.nvim",
+	-- requires = "nvim-tree/nvim-web-devicons",
+	-- config = function()
+	-- require("plugins.trouble").setup {
+	-- your configuration comes here
+	-- or leave it empty to use the default settings
+	-- refer to the configuration section below
+	-- }
+	-- end
+	-- }
 
 
-  -- Install and configure nvim-bufferline.lua
-  use {
-    'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons',
-    config = function()
-      require('plugins.bufferline')
-    end
-  }
+	-- Syntax highlighting
+	use 'sheerun/vim-polyglot'
 
-  -- Install and configure nvim-compe
-  use {'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip'}
+	-- Tree File Explorer
+	ins('preservim/nerdtree', 'plugins.nerdtree', { 'ryanoasis/vim-devicons' })
 
 
-  -- Indent
-  use {
-    'lukas-reineke/indent-blankline.nvim',
-    config = function()
-      -- Indent_blankline
-      require('plugins.indent_blankline')
-    end
-  }
+	-- Install and configure nvim-bufferline.lua
+	use {
+		'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons',
+		config = function()
+			-- require('plugins.bufferline')
+		end
+	}
 
- 
-  use 'Shougo/deoplete.nvim'
+	-- Install and configure nvim-compe
+	use {'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip'}
 
-  -- Code formatting
-  use 'psf/black'
+	use 'Shougo/deoplete.nvim'
 
-  -- Debugger
-  use {
-    'mfussenegger/nvim-dap',
-    requires = {
-      'rcarriga/nvim-dap-ui',
-      'mfussenegger/nvim-dap-python'
-    }
-  }
+	-- Code formatting
+	use 'psf/black'
+
+	-- Debugger
+	use {
+		'mfussenegger/nvim-dap',
+		requires = {
+			'rcarriga/nvim-dap-ui',
+			'mfussenegger/nvim-dap-python'
+		}
+	}
 
 
-   -- LSP signature plugin
-  use {
-    'ray-x/lsp_signature.nvim',
-    config = function()
-      require('lsp_signature').setup{
-        bind = true,
-        handler_opts = {
-          border = "single"
-        },
-        hint_enable = false,
-        doc_lines = 0,
-      }
-    end
-  }
+	-- LSP signature plugin
+	use {
+		'ray-x/lsp_signature.nvim',
+		config = function()
+			require('lsp_signature').setup{
+				bind = true,
+				handler_opts = {
+					border = "single"
+				},
+				hint_enable = false,
+				doc_lines = 0,
+			}
+		end
+	}
 
-  -- Documentation lookup
-  use 'kkoomen/vim-doge'
-  
-  -- Install and load nvim-lspconfig
-  use {
-    'neovim/nvim-lspconfig',
-    config = function()
-      require('lspconfig').pylsp.setup{
-        plugins = {
-          -- Enable pyls-mypy plugin
-          pyls_mypy = {
-            enabled = true,
-            live_mode = true,
-          },
-        },
-      }
-    end
-  }
-  -- Mason
-  -- use 'ludovicchabant/vim-mason'
+	-- Documentation lookup
+	use 'kkoomen/vim-doge'
 
-  --use 'altercation/vim-colors-solarized'
-  -- use 'lifepillar/vim-solarized8'
+	-- Install and load nvim-lspconfig
+	use {
+		'neovim/nvim-lspconfig',
+		config = function()
+			require('lspconfig').pylsp.setup{
+				plugins = {
+					-- Enable pyls-mypy plugin
+					pyls_mypy = {
+						enabled = true,
+						live_mode = true,
+					},
+				},
+			}
+		end
+	}
+	-- Mason
+	-- use 'ludovicchabant/vim-mason'
+
+	--use 'altercation/vim-colors-solarized'
+	-- use 'lifepillar/vim-solarized8'
 
 end)

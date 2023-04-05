@@ -80,6 +80,7 @@ kmap('n', '<leader>cn', ':colorscheme nightfox<CR>', 'Theme nightfox')
 kmap('n', '<leader>cs', ':colorscheme sonokai<CR>', 'Theme somokai')
 
 
+kmap('n', '<leader>du', ':undojoin<CR>', { noremap = true, silent = true })
 
 
 -- vim.api.nvim_set_keymap("n", "<leader>cn", ":lua toggleNumber()<CR>", {noremap = true, silent = true})
@@ -94,7 +95,7 @@ kmap('n', '<leader>e', ':NERDTreeToggle<CR>', 'Tree', { noremap = true, silent =
 kmap('n', '<leader>mm', ':lua ToggleMaximize()<CR>', { noremap = true, silent = true })
 
 -- Reload current file
-kmap("n", "<leader>r", ":w | so %<CR>")
+kmap("n", "<leader>rl", ":so $MYVIMRC<CR><CR>")
 
 
 -- Window navigation
