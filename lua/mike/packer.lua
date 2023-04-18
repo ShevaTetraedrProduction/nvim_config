@@ -70,7 +70,6 @@ packer.startup(function()
 	}
 
 	use 'nvim-treesitter/nvim-treesitter' -- A syntax tree sitter
-	use 'neovim/nvim-lspconfig' -- LSP configuration
 
 	-- Theme
 	-- use 'folke/tokyonight.nvim'
@@ -141,7 +140,7 @@ packer.startup(function()
 	-- Python Development
 	use 'python-mode/python-mode'
 
-	use { 'RishabhRD/nvim-lsputils', requires = {'neovim/nvim-lspconfig'} }
+	-- use { 'RishabhRD/nvim-lsputils', requires = {'neovim/nvim-lspconfig'} }
 
 	use { 'kyazdani42/nvim-tree.lua',requires = 'kyazdani42/nvim-web-devicons'} 
 
@@ -175,7 +174,7 @@ packer.startup(function()
 
 
 	-- Syntax highlighting
-	use 'sheerun/vim-polyglot'
+	-- use 'sheerun/vim-polyglot'
 
 	-- Tree File Explorer
 	ins('preservim/nerdtree', 'plugins.nerdtree', { 'ryanoasis/vim-devicons' })
@@ -190,7 +189,7 @@ packer.startup(function()
 	}
 
 	-- Install and configure nvim-compe
-	use {'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip'}
+	-- use {'hrsh7th/nvim-compe', requires = 'hrsh7th/vim-vsnip'}
 
 	use 'Shougo/deoplete.nvim'
 
@@ -207,39 +206,72 @@ packer.startup(function()
 	}
 
 
+	-- Completion plugin
+	use {'hrsh7th/nvim-compe', config = function()
+		require'compe'.setup {
+			enabled = true;
+			autocomplete = true;
+			debug = false;
+			min_length = 1;
+			preselect = 'always';
+			throttle_time = 80;
+			source_timeout = 200;
+			incomplete_delay = 400;
+			max_abbr_width = 100;
+			max_kind_width = 100;
+			max_menu_width = 100;
+			documentation = true;
+
+			source = {
+				path = true;
+				buffer = true;
+				calc = true;
+				nvim_lsp = true;
+				nvim_lua = true;
+			};
+		}
+	end}
+
+  -- Linting plugin
+  use {'dense-analysis/ale'}
+
+  -- LSP plugin
+  use {'neovim/nvim-lspconfig'}
+
+
 	-- LSP signature plugin
-	use {
-		'ray-x/lsp_signature.nvim',
-		config = function()
-			require('lsp_signature').setup{
-				bind = true,
-				handler_opts = {
-					border = "single"
-				},
-				hint_enable = false,
-				doc_lines = 0,
-			}
-		end
-	}
+	-- use {
+		-- 'ray-x/lsp_signature.nvim',
+		-- config = function()
+			-- require('lsp_signature').setup{
+				-- bind = true,
+				-- handler_opts = {
+					-- border = "single"
+				-- },
+				-- hint_enable = false,
+				-- doc_lines = 0,
+			-- }
+		-- end
+	-- }
 
 	-- Documentation lookup
 	use 'kkoomen/vim-doge'
 
 	-- Install and load nvim-lspconfig
-	use {
-		'neovim/nvim-lspconfig',
-		config = function()
-			require('lspconfig').pylsp.setup{
-				plugins = {
+	-- use {
+		-- 'neovim/nvim-lspconfig',
+		-- config = function()
+			-- require('lspconfig').pylsp.setup{
+				-- plugins = {
 					-- Enable pyls-mypy plugin
-					pyls_mypy = {
-						enabled = true,
-						live_mode = true,
-					},
-				},
-			}
-		end
-	}
+					-- pyls_mypy = {
+						-- enabled = true,
+						-- live_mode = true,
+					-- },
+				-- },
+			-- }
+		-- end
+	-- }
 	-- Mason
 	-- use 'ludovicchabant/vim-mason'
 
