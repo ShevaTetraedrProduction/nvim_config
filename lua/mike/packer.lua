@@ -59,6 +59,8 @@ packer.startup(function()
 		requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
 	}
 
+	--NeoMake 
+	use { 'neomake/neomake', run = function() vim.cmd('UpdateRemotePlugins') end }
 
 	-- Git
 	-- ins('lewis6991/gitsigns.nvim','gitsigns', nil)

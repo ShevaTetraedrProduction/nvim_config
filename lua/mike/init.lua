@@ -8,6 +8,7 @@ require('mike.set')
 require('mike.remap')
 
 require('plugins.lsp')
+require('plugins.neomake-config')
 
 -- require('plugins.nvim_tree')
 -- Configure plugins

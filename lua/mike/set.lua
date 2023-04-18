@@ -28,9 +28,9 @@ opt.mouse = 'a'
 opt.cursorline = true
 
 
+opt.textwidth = 120
 
-
-
+-- vim.o.viminfo = '100,<1000,s1000'
 
 
 
