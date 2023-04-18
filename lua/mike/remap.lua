@@ -49,7 +49,12 @@ local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "floa
 local bpython = Terminal:new({ cmd = "bpython", hidden = true, direction = "float", })
 function _lazygit_toggle() lazygit:toggle() end
 function _bpython_toggle() bpython:toggle() end
-
+function RunPythonFile()
+  local filename = vim.fn.expand('%:p')
+  local cmd = 'python3 '..filename
+  local python_term = Terminal:new({ cmd = cmd, hidden = true, direction = "horizontal" })
+  python_term:toogle()
+end
 local function kmapp(mode, lhs, rhs, description)
   vim.keymap.set(mode, lhs, rhs, {noremap = true, silent = true})
   if description then
@@ -219,6 +224,7 @@ kmap('n', '<leader>cf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
 -- Define a custom key map to trigger signature help
 vim.api.nvim_set_keymap('n', '<Leader>k', '<cmd>lua require("lsp_signature").signature_help()<CR>', { noremap = true, silent = true })
 
+vim.api.nvim_set_keymap('n', '<Leader>te', ':lua RunPythonFile()<CR>', { noremap = true, silent = true })
 
 
 
