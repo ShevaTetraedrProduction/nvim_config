@@ -62,14 +62,26 @@ packer.startup(function()
 	--NeoMake 
 	use { 'neomake/neomake', run = function() vim.cmd('UpdateRemotePlugins') end }
 
-	-- Git
-	-- ins('lewis6991/gitsigns.nvim','gitsigns', nil)
-	use {
-		'lewis6991/gitsigns.nvim',
-		config = function() require('gitsigns').setup{} end
-	}
+  -- Git
+  -- ins('lewis6991/gitsigns.nvim','gitsigns', nil)
+  use {
+    'lewis6991/gitsigns.nvim',
+    config = function() require('gitsigns').setup{} end
+  }
 
-	use 'nvim-treesitter/nvim-treesitter' -- A syntax tree sitter
+  use {
+    "ahmedkhalf/jupyter-nvim",
+    run = ":UpdateRemotePlugins",
+    config = function()
+      require("jupyter-nvim").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
+  use 'nvim-treesitter/nvim-treesitter' -- A syntax tree sitter
 
 	-- Theme
 	-- use 'folke/tokyonight.nvim'
